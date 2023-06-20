@@ -1,27 +1,24 @@
 import React, { useState } from 'react';
 import { ProgressBar } from "../ProgressBar/ProgressBar";
+import { DataComponents } from "../../AppContext";
 
 export interface QuestionsProps {
-  questions: {
-    question: string
-    answers: string[]
-  }[],
-  submitButton: string,
-  onSubmit: (answers: string[]) => void,
-  nextPage: () => void
+  data: DataComponents["questionsPage"];
+  onSubmit: (answers: string[]) => void;
+  nextPage: () => void;
 }
 
 export const Questions = (props: QuestionsProps) => {
-  const {questions, onSubmit, submitButton, nextPage} = props
+  const {data, onSubmit, nextPage} = props
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [answers, setAnswers] = useState([''])
   const [lastQuestionAnswered, setLastQuestionAnswered] = useState(false)
 
-  const handleAnswerClick = (answer: string) => {
+  const handleAnswerClick = (answerIndex: number) => {
     setAnswers(prevAnswers => {
       const newAnswers = [...prevAnswers]
-      newAnswers[currentQuestionIndex] = answer;
-      if (currentQuestionIndex < questions.length - 1) {
+      newAnswers[currentQuestionIndex] = answerIndex.toString();
+      if (currentQuestionIndex < data.questions.length - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1)
       } else {
         setLastQuestionAnswered(true);
@@ -44,17 +41,17 @@ export const Questions = (props: QuestionsProps) => {
     nextPage()
   }
 
-  const currentQuestion = questions[currentQuestionIndex]
-  const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+  const currentQuestion = data.questions[currentQuestionIndex]
+  const progress = ((currentQuestionIndex + 1) / data.questions.length) * 100;
 
   return (
     <div>
       <ProgressBar onBack={handleBackClick} progress={progress} showBackButton={currentQuestionIndex > 0}/>
       <h2>{currentQuestion.question}</h2>
       {currentQuestion.answers.map((answer, index) => {
-        return <button key={index} onClick={() => handleAnswerClick(answer)}>{answer}</button>
+        return <button key={index} onClick={() => handleAnswerClick(index)}>{answer}</button>
       })}
-      {lastQuestionAnswered && <button onClick={handleSubmit}>{submitButton}</button>}
+      {lastQuestionAnswered && <button onClick={handleSubmit}>{data.submitButton}</button>}
     </div>
   )
 }

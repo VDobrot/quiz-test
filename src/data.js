@@ -1,4 +1,3 @@
-// data.js
 export const data = {
   startPage: {
     buttonText: "Start",
@@ -7,7 +6,7 @@ export const data = {
     title: "Immerse Yourself in a Multi-Sensorial Experience",
     subtitle: "Created by You and Shraddha Kapoor",
     paragraphs: [
-      "Explore a new form of self-expression as you create your own multi-sensory visual experience alongside Shraddha Kapoor.",
+      "Explore a new form of self-expression as you create your own multi-sensorial visual experience alongside Shraddha Kapoor.",
       "Hurry! Don't miss out on this extraordinary opportunity to unleash your creativity."
     ],
     buttonText: "Enter Experience",
@@ -61,24 +60,28 @@ export const data = {
   },
   uploadPage: {
     backButton: "Back",
-    title: "Almost there!",
-    subTitle: "Upload a photo to add yourself to your creation",
-    guidelinesTitle: "Photo Guidelines For Best Results",
+    title: "Upload a Photo",
+    description: "Upload a photo to add yourself to your creation.",
+    subTitle: "Photo Guidelines For Best Results",
+    guidelinesTitle: "Guidelines",
     guidelines: [
       {
-        image: "https://picsum.photos/200",
+        image1: "https://picsum.photos/200",
+        image2: "https://picsum.photos/200",
         text1: "Clear, not busy background",
-        text2: "Colored photo"
-      },
-      {
-        image: "https://picsum.photos/200",
-        text1: "In-focus picture",
-        text2: "One person showing"
+        text2: "Colored photo",
+        text3: "In-focus picture",
+        text4: "One person showing"
       }
     ],
     uploadButtonText: "Upload Image",
-    supportedFormats: "Supported formats: png, JPG, heic",
+    supportedFormats: "Supported formats: JPG, PNG, HEIC",
     removeImageButtonText: "Remove Image",
-    finalizeButtonText: "Finalize Creation"
+    deliveryTitle: "Choose Video Delivery",
+    deliveryDescription: "To safeguard your video output and maintain access to it, please share your WhatsApp number or email address for secure delivery and backup.",
+    contactTitle: "Enter WhatsApp Number or Email Address",
+    contactLabel: "WhatsApp",
+    contactPlaceholder: "Phone",
+    finalizeButtonText: "Finalize & Send"
   }
 };

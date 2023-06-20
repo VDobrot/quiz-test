@@ -1,11 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { AppContext } from "./AppContext";
-import { data } from './data';
+import AppProvider from './AppProvider';
+import './styles/styles.scss'
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -13,9 +12,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Router>
-      <AppContext.Provider value={data}>
+      <AppProvider>
         <App/>
-      </AppContext.Provider>
+      </AppProvider>
     </Router>
   </React.StrictMode>
 );

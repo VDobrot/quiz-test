@@ -1,34 +1,24 @@
 import React, { useState } from 'react'
 import { ProgressBar } from "../ProgressBar/ProgressBar";
 import { useNavigate } from 'react-router-dom';
+import { DataComponents } from "../../AppContext";
 
 export interface UploadProps {
-  title: string,
-  subTitle: string,
-  guidelinesTitle: string,
-  guidelines: {
-    image: string,
-    text1: string,
-    text2: string
-  }[],
-  uploadButtonText: string,
-  supportedFormats: string,
-  removeImageButtonText: string,
-  finalizeButtonText: string,
-  backButton: string,
-  nextPage: () => void
+  data: DataComponents["uploadPage"];
+  backPage: () => void;
+  nextPage: () => void;
 }
 
 export const UploadPage = (props: UploadProps) => {
-  const navigate = useNavigate();
+  const {data, nextPage, backPage} = props;
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const handleBackClick = () => {
-    navigate('/question1')
+    backPage();
   }
 
   const handleNextPage = () => {
-    props.nextPage();
+    nextPage();
   }
 
   const handleFileSelect = (event: any) => {
@@ -41,40 +31,56 @@ export const UploadPage = (props: UploadProps) => {
     setSelectedFile(null)
   }
 
-  const {
-    title,
-    subTitle,
-    guidelinesTitle,
-    guidelines,
-    supportedFormats,
-    removeImageButtonText,
-    finalizeButtonText
-  } = props;
-
   return (
     <div>
       <ProgressBar onBack={handleBackClick} progress={100} showBackButton={true}/>
-      <h1>{title}</h1>
-      <h2>{subTitle}</h2>
+      <h1>{data.title}</h1>
+      <p>{data.description}</p>
       <div>
-        <h3>{guidelinesTitle}</h3>
+        <h2>{data.guidelinesTitle}</h2>
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
-          {guidelines.map((item: { image: string; text1: string; text2: string; }, index: number) => (
-            <div key={index}>
-              <img src={selectedFile ? URL.createObjectURL(selectedFile) : item.image} alt="Guideline"/>
-              <p>{item.text1}</p>
-              <p>{item.text2}</p>
-            </div>
-          ))}
+          <div style={{flex: 1}}>
+            {data.guidelines.map((item: { image1: string; image2: string; text1: string; text2: string; text3: string; text4: string;}, index: number) => (
+              <div key={index}>
+                <img src={item.image1} alt="img"/>
+                <img src={item.image2} alt="img"/>
+              </div>
+            ))}
+          </div>
+          <div style={{flex: 1}}>
+            {data.guidelines.map((item: { image1: string; image2: string; text1: string; text2: string; text3: string; text4: string;}, index: number) => (
+              <ol key={index}>
+                <li>{item.text1}</li>
+                <li>{item.text2}</li>
+                <li>{item.text3}</li>
+                <li>{item.text4}</li>
+              </ol>
+            ))}
+          </div>
         </div>
+
         <div>
           <input type="file" onChange={handleFileSelect}/>
-          <p>{supportedFormats}</p>
-          <button disabled={!selectedFile} onClick={handleRemoveImage}>{removeImageButtonText}</button>
-          <button onClick={handleNextPage}>
-            {finalizeButtonText}
-          </button>
+          <p>{data.supportedFormats}</p>
+          {selectedFile && (
+            <div>
+              <img src={URL.createObjectURL(selectedFile)} alt="Preview"/>
+              <p>{selectedFile.name}</p>
+              <p>{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
+              <button onClick={handleRemoveImage}>{data.removeImageButtonText}</button>
+            </div>
+          )}
         </div>
+        <h2>{data.deliveryTitle}</h2>
+        <p>{data.deliveryDescription}</p>
+        <h3>{data.contactTitle}</h3>
+        <div>
+          <p>{data.contactLabel}</p>
+          <input type="tel" placeholder={data.contactPlaceholder}/>
+        </div>
+        <button onClick={handleNextPage}>
+          {data.finalizeButtonText}
+        </button>
       </div>
     </div>
   )

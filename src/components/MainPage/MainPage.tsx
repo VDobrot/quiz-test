@@ -1,33 +1,26 @@
 import React from 'react'
+import { DataComponents } from "../../AppContext";
 export interface MainPageProps {
-  title: string,
-  subtitle: string,
-  paragraphs?: string[],
-  images?: {
-    src: string,
-    alt: string,
-    text: string
-  }[],
-  buttonText: string,
+  data: DataComponents["mainPage"] | DataComponents["instructionsPage"];
   nextPage: () => void
 }
 
 export const MainPage = (props: MainPageProps) => {
-  const {title, subtitle, images, buttonText, nextPage, paragraphs} = props
+  const {data, nextPage} = props
 
   return (
     <div>
-      <h1>{title}</h1>
-      <h2>{subtitle}</h2>
+      <h1>{data.title}</h1>
+      <h2>{data.subtitle}</h2>
 
-      {paragraphs && paragraphs.map((paragraph, index) => {
+      {('paragraphs' in data) && data.paragraphs?.map((paragraph, index) => {
           return (
             <p key={index}>{paragraph}</p>
           )
         }
       )}
 
-      {images && images.map((image, index) => {
+      {('images' in data) && data.images?.map((image, index) => {
         return (
           <div key={index}>
             <img src={image.src} alt={image.alt}/>
@@ -35,7 +28,7 @@ export const MainPage = (props: MainPageProps) => {
           </div>
         )
       })}
-      <button onClick={nextPage}>{buttonText}</button>
+      <button onClick={nextPage}>{data.buttonText}</button>
     </div>
   )
 }

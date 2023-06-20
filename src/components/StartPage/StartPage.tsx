@@ -1,14 +1,17 @@
 import React from 'react'
+import { DataComponents } from "../../AppContext";
 
 export interface StartPageProps {
-  onStart: () => void
+  data: DataComponents["startPage"];
+  onStart: () => void;
 }
 
 export const StartPage = (props: StartPageProps) => {
-  // const { onStart } = props
+  const { data, onStart } = props
+
   return (
     <div>
-      <button onClick={props.onStart}>Start</button>
+      <button onClick={onStart}>{data.buttonText}</button>
     </div>
   )
 }

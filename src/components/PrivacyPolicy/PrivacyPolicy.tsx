@@ -1,23 +1,22 @@
 import React, { useState } from 'react'
+import { DataComponents } from "../../AppContext";
 
 export interface PrivacyPolicyProps {
-  title: string,
-  message: string,
-  buttonTextDecline: string,
-  buttonTextAccept: string,
+  data: DataComponents["privacyPolicy"]
   decline: () => void
   accept: () => void
 }
 
 export const PrivacyPolicy = (props: PrivacyPolicyProps) => {
-  const {title, message, buttonTextDecline, buttonTextAccept, decline, accept} = props
+  const {data, decline, accept} = props
 
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [policyAccepted, setPolicyAccepted] = useState(false);
+  const [ageAccepted, setAgeAccepted] = useState(false);
 
 
   const handleAccept = () => {
-    if (termsAccepted && policyAccepted) {
+    if (termsAccepted && policyAccepted && ageAccepted) {
       accept()
     } else {
       alert('You must accept the terms and conditions!!!')
@@ -27,8 +26,8 @@ export const PrivacyPolicy = (props: PrivacyPolicyProps) => {
 
   return (
     <div>
-      <h1>{title}</h1>
-      <p>{message}</p>
+      <h1>{data.title}</h1>
+      <p>{data.message}</p>
       <input
         type="checkbox"
         id="terms"
@@ -38,7 +37,7 @@ export const PrivacyPolicy = (props: PrivacyPolicyProps) => {
       <label htmlFor="terms">I agree with the
         <a href="#"
            target="_blank"
-           rel="noopener noreferrer">Terms and Conditions
+           rel="noopener noreferrer"> Terms and Conditions
         </a>
       </label>
       {!termsAccepted && <p style={{color: 'red'}}>You must agree to the Terms and Conditions</p>}
@@ -51,14 +50,28 @@ export const PrivacyPolicy = (props: PrivacyPolicyProps) => {
       <label htmlFor="policy">I agree with the
         <a href="#"
            target="_blank"
-           rel="noopener noreferrer">Privacy Policy
+           rel="noopener noreferrer"> Privacy Policy
         </a>
       </label>
       {!policyAccepted && <p style={{color: 'red'}}>You must agree to the Privacy Policy</p>}
       <br/>
-      <button onClick={decline}>{buttonTextDecline}</button>
+      <input
+        type="checkbox"
+        id="terms"
+        name="terms"
+        onChange={() => setAgeAccepted(!ageAccepted)}
+      />
+      <label htmlFor="terms">I agree I am at least
+        <a href="#"
+           target="_blank"
+           rel="noopener noreferrer"> 18 years old
+        </a>
+      </label>
+      {!ageAccepted && <p style={{color: 'red'}}>You must confirm your age</p>}
+      <br/>
+      <button onClick={decline}>{data.buttonTextDecline}</button>
       <button onClick={handleAccept}
-              disabled={!termsAccepted || !policyAccepted}>{buttonTextAccept}</button>
+              disabled={!termsAccepted || !policyAccepted || !ageAccepted}>{data.buttonTextAccept}</button>
     </div>
   )
 }

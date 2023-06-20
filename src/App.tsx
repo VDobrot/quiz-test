@@ -1,58 +1,62 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import './App.css';
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import { StartPage } from "./components/StartPage/StartPage";
+// import { StartPage } from "./components/StartPage/StartPage";
 import { Modal } from "./components/modal/Modal";
 import { ModalFlow } from "./components/ModalFlow/ModalFlow";
 import { MainPage } from "./components/MainPage/MainPage";
 import { Questions } from "./components/Questions/Questions";
 import { UploadPage } from "./components/UploadPage/UploadPage";
-import {AppContext} from "./AppContext";
+import AppContext, { DataAppContext } from "./AppContext";
 
-// import { INSTRUCTIONS_PAGE, MAIN_PAGE, START_PAGE } from './Pages';
 function App() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState('ageVerification');
-  const navigate = useNavigate();
-  const goToNextPage = (nextPage: string) => navigate(nextPage);
+  const context = useContext(AppContext) as DataAppContext;
 
-  const start = () => {
-    setIsModalOpen(true);
+  if (!context) {
+    throw new Error('App must be used within AppProvider');
   }
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setModalContent('ageVerification');
+  const { data, isModalOpen, modalContent, setCurrentPage, setModalContent, currentPage, start, closeModal, goToNextPage, handleSubmit } = context;
+
+  const goToPreviousPage = (previousPage: string) => {
+    setCurrentPage(previousPage);
   }
 
-  const data = useContext(AppContext)
+  let CurrentPageComponent;
 
-  const handleSubmit = (answers: string[]) => {
-    // Handle the answers here
-    console.log(answers);
+  switch (currentPage) {
+    // case 'start':
+    //   CurrentPageComponent = <StartPage onStart={start}  data={data.startPage} />;
+    //   break;
+    case 'main':
+      CurrentPageComponent = <MainPage data={data.mainPage} nextPage={() => goToNextPage('instructions')} />;
+      break;
+    case 'instructions':
+      CurrentPageComponent = <MainPage data={data.instructionsPage} nextPage={() => goToNextPage('questions')} />;
+      break;
+    case 'questions':
+      CurrentPageComponent = <Questions data={data.questionsPage} onSubmit={handleSubmit} nextPage={() => goToNextPage('upload')} />;
+      break;
+    case 'upload':
+      CurrentPageComponent = <UploadPage data={data.uploadPage} backPage={() => goToPreviousPage('questions')} nextPage={() => goToNextPage('start')} />;
+      break;
+    default:
+      CurrentPageComponent = <MainPage data={data.mainPage} nextPage={() => goToNextPage('instructions')} />;
   }
 
   return (
-      <div className="App">
-          <Routes>
-            <Route path='/start' element={<StartPage onStart={start} {...data.startPage} />} />
-            <Route path='/main' element={<MainPage {...data.mainPage} nextPage={() => goToNextPage('/instructions')}/>} />
-            <Route path='/instructions' element={<MainPage {...data.instructionsPage} nextPage={() => goToNextPage('/question1')}/>} />
-
-            <Route path='/question1' element={<Questions {...data.questionsPage} onSubmit={handleSubmit} nextPage={() => goToNextPage('/upload')}/>} />
-            <Route path='/upload' element={<UploadPage {...data.uploadPage} nextPage={() => goToNextPage('/start')}/>} />
-            <Route path='/' element={<StartPage onStart={start} {...data.startPage} />} />
-          </Routes>
-
-          <Modal isOpen={isModalOpen} onClose={closeModal}>
-            <ModalFlow
-              modalContent={modalContent}
-              setModalContent={setModalContent}
-              closeModal={closeModal}
-            />
-          </Modal>
-      </div>
-  )
+    <div className="App">
+      {CurrentPageComponent}
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <ModalFlow
+          modalContent={modalContent}
+          setModalContent={setModalContent}
+          closeModal={closeModal}
+          data={data}
+          goToNextPage={goToNextPage}
+        />
+      </Modal>
+    </div>
+  );
 }
 
 export default App;
