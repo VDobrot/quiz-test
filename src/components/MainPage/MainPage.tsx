@@ -1,5 +1,6 @@
 import React from 'react'
 import { DataComponents } from "../../AppContext";
+
 export interface MainPageProps {
   data: DataComponents["mainPage"] | DataComponents["instructionsPage"];
   nextPage: () => void
@@ -12,7 +13,7 @@ export const MainPage = (props: MainPageProps) => {
     <div>
       <h1>{data.title}</h1>
       <h2>{data.subtitle}</h2>
-
+      {('image' in data) && <img src={data.image.src} alt={data.image.alt}/>}
       {('paragraphs' in data) && data.paragraphs?.map((paragraph, index) => {
           return (
             <p key={index}>{paragraph}</p>

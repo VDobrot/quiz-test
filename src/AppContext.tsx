@@ -7,6 +7,7 @@ export interface DataComponents {
   mainPage: {
     title: string,
     subtitle: string,
+    image: {src: string, alt: string},
     paragraphs?: string[],
     buttonText: string,
   },

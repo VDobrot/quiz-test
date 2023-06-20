@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { ProgressBar } from "../ProgressBar/ProgressBar";
-import { useNavigate } from 'react-router-dom';
 import { DataComponents } from "../../AppContext";
 
 export interface UploadProps {
@@ -11,7 +10,9 @@ export interface UploadProps {
 
 export const UploadPage = (props: UploadProps) => {
   const {data, nextPage, backPage} = props;
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleBackClick = () => {
     backPage();
@@ -23,12 +24,28 @@ export const UploadPage = (props: UploadProps) => {
 
   const handleFileSelect = (event: any) => {
     if (event.target.files) {
-      setSelectedFile(event.target.files[0])
+      const file = event.target.files[0]
+      if (file.type === 'image/jpeg' || file.type === 'image/png') {
+        setSelectedFile(event.target.files[0])
+        setError(null);
+      } else {
+        setError('The image you uploaded does not meet our content moderation requirements. Please remove and try again.');
+      }
     }
   }
 
   const handleRemoveImage = () => {
+    setError(null);
     setSelectedFile(null)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  }
+
+  const handleUploadButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   }
 
   return (
@@ -40,7 +57,10 @@ export const UploadPage = (props: UploadProps) => {
         <h2>{data.guidelinesTitle}</h2>
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
           <div style={{flex: 1}}>
-            {data.guidelines.map((item: { image1: string; image2: string; text1: string; text2: string; text3: string; text4: string;}, index: number) => (
+            {data.guidelines.map((item: {
+              image1: string;
+              image2: string;
+            }, index: number) => (
               <div key={index}>
                 <img src={item.image1} alt="img"/>
                 <img src={item.image2} alt="img"/>
@@ -48,7 +68,12 @@ export const UploadPage = (props: UploadProps) => {
             ))}
           </div>
           <div style={{flex: 1}}>
-            {data.guidelines.map((item: { image1: string; image2: string; text1: string; text2: string; text3: string; text4: string;}, index: number) => (
+            {data.guidelines.map((item: {
+              text1: string;
+              text2: string;
+              text3: string;
+              text4: string;
+            }, index: number) => (
               <ol key={index}>
                 <li>{item.text1}</li>
                 <li>{item.text2}</li>
@@ -60,8 +85,10 @@ export const UploadPage = (props: UploadProps) => {
         </div>
 
         <div>
-          <input type="file" onChange={handleFileSelect}/>
+          <input type="file" accept=".jpg,.jpeg,.png" onChange={handleFileSelect} ref={fileInputRef} style={{display: 'none'}} />
+          <button onClick={handleUploadButtonClick} disabled={!!selectedFile}>{data.uploadButtonText}</button>
           <p>{data.supportedFormats}</p>
+          {error && <p style={{color: 'red'}}>{error}</p>}
           {selectedFile && (
             <div>
               <img src={URL.createObjectURL(selectedFile)} alt="Preview"/>

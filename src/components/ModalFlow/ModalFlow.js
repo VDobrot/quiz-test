@@ -28,11 +28,11 @@ export const ModalFlow = ({ modalContent, setModalContent, closeModal, data, goT
          data={data.cookiePage}
         decline={() => {
           closeModal()
-          setModalContent('ageVerification');
+          setModalContent('ageVerification')
         }}
         accept={() => {
           closeModal()
-          goToNextPage('main');
+          goToNextPage('main')
         }}
       />
     default:

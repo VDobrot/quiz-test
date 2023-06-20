@@ -5,6 +5,7 @@ export const data = {
   mainPage: {
     title: "Immerse Yourself in a Multi-Sensorial Experience",
     subtitle: "Created by You and Shraddha Kapoor",
+    image: {src: "https://picsum.photos/200", alt: "demo"},
     paragraphs: [
       "Explore a new form of self-expression as you create your own multi-sensorial visual experience alongside Shraddha Kapoor.",
       "Hurry! Don't miss out on this extraordinary opportunity to unleash your creativity."
@@ -74,7 +75,7 @@ export const data = {
         text4: "One person showing"
       }
     ],
-    uploadButtonText: "Upload Image",
+    uploadButtonText: "Click to upload",
     supportedFormats: "Supported formats: JPG, PNG, HEIC",
     removeImageButtonText: "Remove Image",
     deliveryTitle: "Choose Video Delivery",
