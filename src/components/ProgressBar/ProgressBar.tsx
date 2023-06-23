@@ -1,12 +1,12 @@
 import React from "react";
 
-export interface ProgressBar {
+export interface ProgressBarProps {
   onBack: () => void,
   progress: number,
   showBackButton: boolean
 }
 
-export const ProgressBar = (props: ProgressBar) => {
+export const ProgressBar = (props: ProgressBarProps) => {
   const {onBack, progress, showBackButton} = props;
 
   return (

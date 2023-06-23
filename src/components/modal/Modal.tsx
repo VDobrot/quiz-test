@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CloseIcon from "../../assets/icons/close.png";
-import "./Modal.css";
+import "./Modal.scss";
 
 export interface ModalProps {
   isOpen: boolean

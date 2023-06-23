@@ -7,11 +7,17 @@ import { MainPage } from "./components/MainPage/MainPage";
 import { Questions } from "./components/Questions/Questions";
 import { UploadPage } from "./components/UploadPage/UploadPage";
 import { LoadingPage } from "./components/LoadingPage/LoadingPage";
+import { ProcessingPage } from "./components/ProcessingPage/ProcessingPage";
 import AppContext, { DataAppContext } from "./AppContext";
+import { ContactOption } from './components/UploadPage/UploadPage';
+
 
 function App() {
-  const context = useContext(AppContext) as DataAppContext;
-  const [isLoading, setIsLoading] = useState(false);
+  const context = useContext(AppContext) as DataAppContext
+  const [isLoading, setIsLoading] = useState(false)
+  const [contactOption, setContactOption] = useState<ContactOption>('Email')
+  const [contactValue, setContactValue] = useState('')
+
 
   if (!context) {
     throw new Error('App must be used within AppProvider');
@@ -76,8 +82,22 @@ function App() {
 
       case 'upload':
         CurrentPageComponent = <UploadPage
-          data={data.uploadPage} backPage={() => goToPreviousPage('questions')}
-          nextPage={() => goToNextPage('start')}
+          data={data.uploadPage}
+          contactOption={contactOption}
+          setContactOption={setContactOption}
+          contactValue={contactValue}
+          setContactValue={setContactValue}
+          backPage={() => goToPreviousPage('questions')}
+          nextPage={() => goToNextPage('processing')}
+        />
+        break
+
+      case 'processing':
+        CurrentPageComponent = <ProcessingPage
+          data={data.processingPage}
+          contactOption={contactOption}
+          contactValue={contactValue}
+          // nextPage={() => goToNextPage('start')}
         />
         break
 

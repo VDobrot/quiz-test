@@ -7,7 +7,7 @@ export interface DataComponents {
   mainPage: {
     title: string,
     subtitle: string,
-    image: {src: string, alt: string},
+    image: { src: string, alt: string },
     paragraphs?: string[],
     buttonText: string,
   },
@@ -40,6 +40,12 @@ export interface DataComponents {
     message: string,
     buttonTextDecline: string,
     buttonTextAccept: string,
+    termsText: string,
+    errorTermsText: string,
+    policyText: string,
+    errorPolicyText: string,
+    ageText: string,
+    errorAgeText: string
   },
   uploadPage: {
     backButton: string,
@@ -52,11 +58,16 @@ export interface DataComponents {
     contactPlaceholder: string,
     deliveryDescription: string,
     contactTitle: string,
-    contactLabel: string,
     uploadButtonText: string,
     supportedFormats: string,
     removeImageButtonText: string,
     finalizeButtonText: string
+  },
+  processingPage: {
+    title: string,
+    description: string,
+    estimatedTime: number,
+    contactInfo: string
   }
 }
 
@@ -71,6 +82,7 @@ export interface DataAppContext {
   closeModal: () => void;
   goToNextPage: (nextPage: string) => void;
   handleSubmit: (answers: string[]) => void;
+  setContactInfo: (info: string) => void;
 }
 
 const AppContext = createContext<DataAppContext | undefined>(undefined);

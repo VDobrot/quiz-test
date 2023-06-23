@@ -1,11 +1,15 @@
-import React, { ReactNode, useState } from 'react';
-import AppContext from './AppContext';
-import { data } from './data';
+import React, { ReactNode, useState } from 'react'
+import AppContext from './AppContext'
+import { data } from './data'
 
 const AppProvider = ({children}: { children: ReactNode }) => {
-  const [isModalOpen, setIsModalOpen] = useState(true);
-  const [modalContent, setModalContent] = useState('ageVerification');
-  const [currentPage, setCurrentPage] = useState('start');
+  const [isModalOpen, setIsModalOpen] = useState(true)
+  const [modalContent, setModalContent] = useState('ageVerification')
+  const [currentPage, setCurrentPage] = useState('start')
+  const [contactInfo, setContactInfo] = useState('')
+  const [selectedContactType, setSelectedContactType] = useState('')
+
+
 
   const start = () => {
     setIsModalOpen(true);
@@ -35,11 +39,12 @@ const AppProvider = ({children}: { children: ReactNode }) => {
       start,
       closeModal,
       goToNextPage,
-      handleSubmit
+      handleSubmit,
+      setContactInfo
     }}>
       {children}
     </AppContext.Provider>
   );
 };
 
-export default AppProvider;
+export default AppProvider
